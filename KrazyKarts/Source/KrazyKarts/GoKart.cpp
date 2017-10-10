@@ -30,7 +30,7 @@ void AGoKart::Tick(float DeltaTime)
 
 	Velocity += AccelerationVector;
 
-	AddActorWorldOffset(Velocity * DeltaTime);
+	AddActorWorldOffset(Velocity * DeltaTime, true);
 }
 
 // Called to bind functionality to input
