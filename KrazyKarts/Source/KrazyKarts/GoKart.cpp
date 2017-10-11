@@ -49,6 +49,8 @@ void AGoKart::ApplyThrottleAcceleration(float DeltaTime)
 	FVector AccelerationVector = GetActorForwardVector() * Throttle * Acceleration * DeltaTime;
 
 	Velocity += AccelerationVector;
+
+	Velocity = Velocity.GetClampedToMaxSize(TopSpeed);
 }
 
 void AGoKart::ApplyVelocityToMovement(float DeltaTime)
