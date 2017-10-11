@@ -33,7 +33,12 @@ void AGoKart::Tick(float DeltaTime)
 
 void AGoKart::ApplySteering(float DeltaTime)
 {
-	FQuat Rotation(GetActorUpVector(), FMath::DegreesToRadians(FullSteerDegrees) * WheelThrow * DeltaTime);
+	float RotationAngle = FMath::DegreesToRadians(FullSteerDegrees) * WheelThrow * DeltaTime;
+	if (FVector::DotProduct(GetActorForwardVector(), Velocity) < 0)
+	{
+		RotationAngle = -RotationAngle;
+	}
+	FQuat Rotation(GetActorUpVector(), RotationAngle);
 	Velocity = Rotation.RotateVector(Velocity);
 
 	AddActorWorldRotation(Rotation);
