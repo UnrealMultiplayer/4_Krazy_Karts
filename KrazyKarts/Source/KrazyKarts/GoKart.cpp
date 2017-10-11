@@ -46,7 +46,16 @@ void AGoKart::ApplySteering(float DeltaTime)
 
 void AGoKart::ApplyThrottleAcceleration(float DeltaTime)
 {
-	FVector AccelerationVector = GetActorForwardVector() * Throttle * Acceleration * DeltaTime;
+	FVector AccelerationVector = GetActorForwardVector() * Throttle * DeltaTime;
+
+	if (FVector::DotProduct(Velocity, AccelerationVector) < 0) 
+	{
+		AccelerationVector *= BreakingDecceleration;
+	}
+	else 
+	{
+		AccelerationVector *= Acceleration;
+	}
 
 	Velocity += AccelerationVector;
 

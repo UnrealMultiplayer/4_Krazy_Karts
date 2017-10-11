@@ -41,6 +41,10 @@ private:
 	float Acceleration;
 
 	UPROPERTY(EditAnywhere)
+	float BreakingDecceleration;
+
+
+	UPROPERTY(EditAnywhere)
 	float TopSpeed;
 
 	UPROPERTY(EditAnywhere)
