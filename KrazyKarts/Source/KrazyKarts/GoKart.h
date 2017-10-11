@@ -23,11 +23,19 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void ApplySteering(float DeltaTime);
+
+	void ApplyThrottleAcceleration(float DeltaTime);
+
+	void ApplyVelocityToMovement(float DeltaTime);
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
 	void MoveForward(float val);
+
+	void MoveRight(float val);
 
 	UPROPERTY(EditAnywhere)
 	float Acceleration;
@@ -35,8 +43,11 @@ private:
 	UPROPERTY(EditAnywhere)
 	float TopSpeed;
 
+	UPROPERTY(EditAnywhere)
+	float FullSteerDegrees = 45;
+
 	FVector Velocity;
-	float WheelAngle;
+	float WheelThrow;
 
 	float Throttle;
 };
