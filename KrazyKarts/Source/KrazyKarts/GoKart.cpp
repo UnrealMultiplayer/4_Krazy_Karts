@@ -24,11 +24,20 @@ void AGoKart::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	ApplyThrottleAcceleration(DeltaTime);
+
+	ApplyVelocityToMovement(DeltaTime);
+}
+
+void AGoKart::ApplyThrottleAcceleration(float DeltaTime)
+{
 	FVector AccelerationVector = GetActorForwardVector() * Throttle * Acceleration * DeltaTime;
-	UE_LOG(LogTemp, Warning, TEXT("Accelerating %f"), AccelerationVector.Size());
 
 	Velocity += AccelerationVector;
+}
 
+void AGoKart::ApplyVelocityToMovement(float DeltaTime)
+{
 	FVector Delta = Velocity * DeltaTime;
 	FHitResult Hit(1);
 	AddActorWorldOffset(Delta, true, &Hit);
