@@ -27,10 +27,19 @@ void AGoKart::Tick(float DeltaTime)
 	FVector AccelerationVector = GetActorForwardVector() * Throttle * Acceleration * DeltaTime;
 	UE_LOG(LogTemp, Warning, TEXT("Accelerating %f"), AccelerationVector.Size());
 
-
 	Velocity += AccelerationVector;
 
-	AddActorWorldOffset(Velocity * DeltaTime, true);
+	FVector Delta = Velocity * DeltaTime;
+	FHitResult Hit(1);
+	AddActorWorldOffset(Delta, true, &Hit);
+
+	if (Hit.IsValidBlockingHit())
+	{
+		Delta = FVector::VectorPlaneProject(Delta * (1 - Hit.Time), Hit.Normal);
+		Velocity = FVector::VectorPlaneProject(Velocity, Hit.Normal);
+
+		AddActorWorldOffset(Delta, true);
+	}
 }
 
 // Called to bind functionality to input
