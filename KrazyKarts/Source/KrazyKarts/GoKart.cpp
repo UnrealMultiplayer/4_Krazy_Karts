@@ -26,53 +26,67 @@ void AGoKart::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	ApplyResistance(DeltaTime);
+	FVector Forces; 
+	Forces += GetResistance();
+	
+	Forces += GetDriveForce();
 
-	ApplyThrottleAcceleration(DeltaTime);
+	Velocity += (Forces / Mass) * DeltaTime;
 
 	ApplySteering(DeltaTime);
 
-	ApplyVelocityToMovement(DeltaTime);
+	UpdatePositionWithVelocity(DeltaTime);
 }
 
-void AGoKart::ApplyResistance(float DeltaTime)
+FVector AGoKart::GetResistance()
 {
-	float DecelerationDueToResistance = MaxAcceleration * ( Velocity.SizeSquared() / FMath::Square(TopSpeed) );
-	Velocity -= Velocity.GetSafeNormal() * DecelerationDueToResistance * DeltaTime ;
+	FVector Force = - Velocity.GetSafeNormal() * Velocity.SizeSquared() * DragCoefficient;
 
-	Velocity = Velocity.GetSafeNormal() * FMath::Clamp(Velocity.Size() - RollingResistanceDeceleration * DeltaTime, 0.f, Velocity.Size());
+	Force -= Velocity.GetSafeNormal() * RollingResistance;
+
+	return Force;
 }
 
 void AGoKart::ApplySteering(float DeltaTime)
 {
-	float RotationAngle = FMath::DegreesToRadians(FullSteerRate) * WheelThrow * DeltaTime;
-	if (FVector::DotProduct(GetActorForwardVector(), Velocity) < 0)
-	{
-		RotationAngle = -RotationAngle;
-	}
-	FQuat Rotation(GetActorUpVector(), RotationAngle);
+	FQuat Rotation(GetActorUpVector(), GetSteeringRate() * DeltaTime);
 	Velocity = Rotation.RotateVector(Velocity);
 
 	AddActorWorldRotation(Rotation);
 }
 
-void AGoKart::ApplyThrottleAcceleration(float DeltaTime)
+float AGoKart::GetSteeringRate()
 {
-	FVector AccelerationVector = GetActorForwardVector() * Throttle * DeltaTime;
-
-	if (FVector::DotProduct(Velocity, AccelerationVector) < 0) 
+	float RotationAngle = FMath::DegreesToRadians(FullSteerRate) * WheelThrow;
+	float ForwardSpeed = FVector::DotProduct(GetActorForwardVector(), Velocity);
+	if (ForwardSpeed > MinSteeringSpeed)
 	{
-		AccelerationVector *= MinBreakingDeceleration;
+		return RotationAngle;
+	}
+	if (ForwardSpeed < -MinSteeringSpeed)
+	{
+		return -RotationAngle;
+	}
+	return 0;
+}
+
+FVector AGoKart::GetDriveForce()
+{
+	FVector Force = GetActorForwardVector() * Throttle;
+
+	if (FVector::DotProduct(Velocity, Force) < 0)
+	{
+		Force *= BreakingForce;
 	}
 	else 
 	{
-		AccelerationVector *= MaxAcceleration;
+		Force *= DriveForce;
 	}
 
-	Velocity += AccelerationVector;
+	return Force;
 }
 
-void AGoKart::ApplyVelocityToMovement(float DeltaTime)
+void AGoKart::UpdatePositionWithVelocity(float DeltaTime)
 {
 	FVector Delta = Velocity * METERS_TO_UNREAL * DeltaTime;
 	FHitResult Hit(1);

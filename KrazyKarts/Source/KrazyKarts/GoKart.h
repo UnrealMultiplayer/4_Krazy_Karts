@@ -23,13 +23,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void ApplyResistance(float DeltaTime);
+	FVector GetResistance();
 
 	void ApplySteering(float DeltaTime);
 
-	void ApplyThrottleAcceleration(float DeltaTime);
+	FVector GetDriveForce();
 
-	void ApplyVelocityToMovement(float DeltaTime);
+	float GetSteeringRate();
+
+	void UpdatePositionWithVelocity(float DeltaTime);
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -39,25 +41,33 @@ private:
 
 	void MoveRight(float val);
 
-	// The acceleration of the car with no wind resistance in m/s^2.
+	// Force of engine in N.
 	UPROPERTY(EditAnywhere)
-	float MaxAcceleration;
+	float DriveForce;
 
-	// The deceleration when breaking of the car with no wind resistance in m/s^2.
+	// Mass of the car in kg.
 	UPROPERTY(EditAnywhere)
-	float MinBreakingDeceleration;
+	float Mass;
 
-	// Constant deceleration applied to simulate rolling resistance.
+	// Force when breaking in N.
 	UPROPERTY(EditAnywhere)
-	float RollingResistanceDeceleration;
+	float BreakingForce;
 
-	// Max speed that can be reached when wind resistance equals forward force, in m/s.
+	// Force required to start moving in N.
 	UPROPERTY(EditAnywhere)
-	float TopSpeed;
+	float RollingResistance;
+
+	// How much drag affects the car (unitless).
+	UPROPERTY(EditAnywhere)
+	float DragCoefficient;
 
 	// The number of degrees rotated per second at full control throw. degrees/s.
 	UPROPERTY(EditAnywhere)
 	float FullSteerRate = 45;
+
+	// Minimum forward speed at which to allow steering (m/s).
+	UPROPERTY(EditAnywhere)
+	float MinSteeringSpeed = 1;
 
 	FVector Velocity;
 	float WheelThrow;
