@@ -23,6 +23,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	void ApplyResistance(float DeltaTime);
+
 	void ApplySteering(float DeltaTime);
 
 	void ApplyThrottleAcceleration(float DeltaTime);
@@ -37,18 +39,25 @@ private:
 
 	void MoveRight(float val);
 
+	// The acceleration of the car with no wind resistance in m/s^2.
 	UPROPERTY(EditAnywhere)
-	float Acceleration;
+	float MaxAcceleration;
 
+	// The deceleration when breaking of the car with no wind resistance in m/s^2.
 	UPROPERTY(EditAnywhere)
-	float BreakingDecceleration;
+	float MinBreakingDeceleration;
 
+	// Constant deceleration applied to simulate rolling resistance.
+	UPROPERTY(EditAnywhere)
+	float RollingResistanceDeceleration;
 
+	// Max speed that can be reached when wind resistance equals forward force, in m/s.
 	UPROPERTY(EditAnywhere)
 	float TopSpeed;
 
+	// The number of degrees rotated per second at full control throw. degrees/s.
 	UPROPERTY(EditAnywhere)
-	float FullSteerDegrees = 45;
+	float FullSteerRate = 45;
 
 	FVector Velocity;
 	float WheelThrow;

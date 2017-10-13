@@ -4,6 +4,8 @@
 
 #include "Components/InputComponent.h"
 
+const float METERS_TO_UNREAL = 100;
+
 // Sets default values
 AGoKart::AGoKart()
 {
@@ -24,6 +26,8 @@ void AGoKart::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	ApplyResistance(DeltaTime);
+
 	ApplyThrottleAcceleration(DeltaTime);
 
 	ApplySteering(DeltaTime);
@@ -31,9 +35,17 @@ void AGoKart::Tick(float DeltaTime)
 	ApplyVelocityToMovement(DeltaTime);
 }
 
+void AGoKart::ApplyResistance(float DeltaTime)
+{
+	float DecelerationDueToResistance = MaxAcceleration * ( Velocity.SizeSquared() / FMath::Square(TopSpeed) );
+	Velocity -= Velocity.GetSafeNormal() * DecelerationDueToResistance * DeltaTime ;
+
+	Velocity = Velocity.GetSafeNormal() * FMath::Clamp(Velocity.Size() - RollingResistanceDeceleration * DeltaTime, 0.f, Velocity.Size());
+}
+
 void AGoKart::ApplySteering(float DeltaTime)
 {
-	float RotationAngle = FMath::DegreesToRadians(FullSteerDegrees) * WheelThrow * DeltaTime;
+	float RotationAngle = FMath::DegreesToRadians(FullSteerRate) * WheelThrow * DeltaTime;
 	if (FVector::DotProduct(GetActorForwardVector(), Velocity) < 0)
 	{
 		RotationAngle = -RotationAngle;
@@ -50,21 +62,19 @@ void AGoKart::ApplyThrottleAcceleration(float DeltaTime)
 
 	if (FVector::DotProduct(Velocity, AccelerationVector) < 0) 
 	{
-		AccelerationVector *= BreakingDecceleration;
+		AccelerationVector *= MinBreakingDeceleration;
 	}
 	else 
 	{
-		AccelerationVector *= Acceleration;
+		AccelerationVector *= MaxAcceleration;
 	}
 
 	Velocity += AccelerationVector;
-
-	Velocity = Velocity.GetClampedToMaxSize(TopSpeed);
 }
 
 void AGoKart::ApplyVelocityToMovement(float DeltaTime)
 {
-	FVector Delta = Velocity * DeltaTime;
+	FVector Delta = Velocity * METERS_TO_UNREAL * DeltaTime;
 	FHitResult Hit(1);
 	AddActorWorldOffset(Delta, true, &Hit);
 
