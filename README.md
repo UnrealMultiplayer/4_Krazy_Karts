@@ -14,3 +14,10 @@
 + Revision of forces in physics.
 + Calculating movement from force.
 + Providing the driving force.
+
+### 3 Blocking Movement Without Physics ###
+
++ Setting up collision volumes.
++ Sweeping with `AddActorWorldOffset`.
++ Resetting velocity on collision.
++ Refactoring the `Tick` function.
