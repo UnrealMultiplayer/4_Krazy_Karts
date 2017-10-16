@@ -27,3 +27,9 @@
 + Angle axis rotations with FQuat.
 + Adding rotations actors.
 + Rotating our velocity.
+
+### 5 Simulating Air Resistance ###
+
++ Understanding air resistance.
++ Getting the "speed".
++ Calculating force due to air resistance.
