@@ -40,3 +40,9 @@
 + Finding the gravity in Unreal.
 + Implementing rolling resistance.
 + Example rolling resistance coeffients. 
+
+### 7 Steering And Turning Circles ###
+
++ Why we get turning circles.
++ Calculating our rotation geometry.
++ Correcting steering behaviour.
