@@ -46,3 +46,10 @@
 + Why we get turning circles.
 + Calculating our rotation geometry.
 + Correcting steering behaviour.
+
+### 8 Server Functions & Cheat Protection ###
+
++ How to change state from the client.
++ Introduction to RPC server functions.
++ What is validation?
++ Implementing validation for input.
