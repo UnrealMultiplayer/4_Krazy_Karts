@@ -53,3 +53,9 @@
 + Introduction to RPC server functions.
 + What is validation?
 + Implementing validation for input.
+
+### 9 AutonomousProxy vs SimulatedProxy ###
+
++ What are Actor roles?
++ Investigating the network roles.
++ Updating the `AutonomousProxy`.
