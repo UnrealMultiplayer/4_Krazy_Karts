@@ -59,3 +59,9 @@
 + What are Actor roles?
 + Investigating the network roles.
 + Updating the `AutonomousProxy`.
+
+### 10 Sources Of Simulation Error ###
+
++ How simulation error effect our game.
++ Overview the different sources of error.
++ Investigate approaches to eliminating them.
