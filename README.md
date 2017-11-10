@@ -65,3 +65,10 @@
 + How simulation error effect our game.
 + Overview the different sources of error.
 + Investigate approaches to eliminating them.
+
+### 11 Replicating Variables From The Server ###
+
++ Overview of property replication.
++ Replicating the actor position.
++ Setting and reading the property.
++ Replicating the actor rotation.
