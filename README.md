@@ -72,3 +72,10 @@
 + Replicating the actor position.
 + Setting and reading the property.
 + Replicating the actor rotation.
+
+### 12 Triggering Code On Replication ###
+
++ Deep dive on property replication.
++ Setting the network update interval.
++ Notify on replicate.
++ Simulate between updates.
