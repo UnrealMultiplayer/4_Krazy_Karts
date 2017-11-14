@@ -79,3 +79,9 @@
 + Setting the network update interval.
 + Notify on replicate.
 + Simulate between updates.
+
+### 13 Smooth Simulated Proxies ###
+
++ Replicating velocity.
++ Why is movement jerky?
++ Replicating control input to SimulatedProxy.
