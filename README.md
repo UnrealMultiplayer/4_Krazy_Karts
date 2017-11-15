@@ -85,3 +85,9 @@
 + Replicating velocity.
 + Why is movement jerky?
 + Replicating control input to SimulatedProxy.
+
+### 14 Simulating Lag And Packet Loss ###
+
++ What is lag?
++ Simulating lag and packet loss.
++ Why does lag cause glitching?
