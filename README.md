@@ -91,3 +91,10 @@
 + What is lag?
 + Simulating lag and packet loss.
 + Why does lag cause glitching?
+
+### 15 Replay Autonomous Moves ###
+
++ Why do we reset when accelerating?
++ Keeping AutonomousProxy ahead of the Server.
++ What information needs to be sent to the server.
++ Compare our different simulation approaches.
