@@ -98,3 +98,8 @@
 + Keeping AutonomousProxy ahead of the Server.
 + What information needs to be sent to the server.
 + Compare our different simulation approaches.
+
+### 16 Planning Client-Side Prediction ###
+
++ Pseudocode for client prediction.
++ Adding structs for synchronisation.
