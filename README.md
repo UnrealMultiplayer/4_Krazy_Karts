@@ -122,3 +122,9 @@
 + Tidying the move creation code.
 + Printing the queue length.
 + Removing acknowledged moves.
+
+### 20 Simulating Unacknowledged Moves ###
+
++ Simulate all moves.
++ Testing for smoothness.
++ How can we still make it glitch?
