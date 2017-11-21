@@ -115,3 +115,10 @@
 + The `SimulateMove` signature.
 + Updating the canonical state.
 + Implement `SimulateMove`.
+
+### 19 Unacknowledged Move Queue ###
+
++ `TArray` for the Move queue.
++ Tidying the move creation code.
++ Printing the queue length.
++ Removing acknowledged moves.
