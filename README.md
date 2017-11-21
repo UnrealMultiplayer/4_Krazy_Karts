@@ -109,3 +109,9 @@
 + What do we have already?
 + Replicating state via a struct.
 + Sending the `Move` struct via RPC.
+
+### 18 Simulating A Move ###
+
++ The `SimulateMove` signature.
++ Updating the canonical state.
++ Implement `SimulateMove`.
