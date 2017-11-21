@@ -103,3 +103,9 @@
 
 + Pseudocode for client prediction.
 + Adding structs for synchronisation.
+
+### 17 Replicating Structs ###
+
++ What do we have already?
++ Replicating state via a struct.
++ Sending the `Move` struct via RPC.
