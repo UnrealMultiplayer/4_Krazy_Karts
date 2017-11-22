@@ -64,11 +64,15 @@ void AGoKart::Tick(float DeltaTime)
 			UnacknowledgedMoves.Add(Move);
 
 			UE_LOG(LogTemp, Warning, TEXT("Queue length: %d"), UnacknowledgedMoves.Num());
+
+			SimulateMove(Move);
 		}
 
 		Server_SendMove(Move);
-
-		SimulateMove(Move);
+	}
+	else if (!HasAuthority())
+	{
+		SimulateMove(ServerState.LastMove);
 	}
 
 	DrawDebugString(GetWorld(), FVector(0, 0, 100), GetEnumText(Role), this, FColor::White, DeltaTime);
