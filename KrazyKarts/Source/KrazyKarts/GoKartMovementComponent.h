@@ -42,7 +42,8 @@ public:
 
 	void SimulateMove(const FGoKartMove& Move);
 
-	FGoKartMove CreateMove(float DeltaTime);
+
+	FGoKartMove GetLastMove() { return LastMove; };
 
 	FVector GetVelocity() { return Velocity; };
 	void SetVelocity(const FVector& InVelocity) { Velocity = InVelocity; };
@@ -54,6 +55,8 @@ public:
 	void SetSteeringThrow(const float& InSteeringThrow) { SteeringThrow = InSteeringThrow; };
 
 private:
+
+	FGoKartMove CreateMove(float DeltaTime);
 
 	FVector GetAirResistance();
 	FVector GetRollingResistance();
@@ -82,6 +85,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	float RollingResistanceCoefficient = 0.015;
 
+
+	FGoKartMove LastMove;
 
 	FVector Velocity;
 

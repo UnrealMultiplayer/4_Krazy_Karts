@@ -44,6 +44,8 @@ public:
 private:
 	void ClearAcknowledgeMoves(FGoKartMove LastMove);
 
+	void UpdateServerState(FGoKartMove LastMove);
+
 	UFUNCTION(Server, Reliable, WithValidation)
 		void Server_SendMove(FGoKartMove Move);
 

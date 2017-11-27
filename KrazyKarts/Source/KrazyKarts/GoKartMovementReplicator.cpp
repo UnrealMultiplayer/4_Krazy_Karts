@@ -10,6 +10,7 @@ UGoKartMovementReplicator::UGoKartMovementReplicator()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
+	SetIsReplicated(true);
 
 	// ...
 }
@@ -20,8 +21,6 @@ void UGoKartMovementReplicator::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SetIsReplicated(true);
-	
 }
 
 
@@ -33,20 +32,20 @@ void UGoKartMovementReplicator::TickComponent(float DeltaTime, ELevelTick TickTy
 	auto MovementComponent = GetOwner()->FindComponentByClass<UGoKartMovementComponent>();
 	if (MovementComponent == nullptr) return;
 	
-	if (GetOwnerRole() == ROLE_AutonomousProxy || GetOwner()->GetRemoteRole() == ROLE_SimulatedProxy)
+	FGoKartMove LastMove = MovementComponent->GetLastMove();
+
+	if (GetOwnerRole() == ROLE_AutonomousProxy)
 	{
-		FGoKartMove Move = MovementComponent->CreateMove(DeltaTime);
+		Server_SendMove(LastMove);
 
-		Server_SendMove(Move);
+		UnacknowledgedMoves.Add(LastMove);
 
-		if (GetOwnerRole() == ROLE_AutonomousProxy)
-		{
-			UnacknowledgedMoves.Add(Move);
-
-			UE_LOG(LogTemp, Warning, TEXT("Queue length: %d"), UnacknowledgedMoves.Num());
-
-			MovementComponent->SimulateMove(Move);
-		}
+		UE_LOG(LogTemp, Warning, TEXT("Queue length: %d"), UnacknowledgedMoves.Num());
+	}
+	
+	if (GetOwner()->GetRemoteRole() == ROLE_SimulatedProxy)
+	{
+		UpdateServerState(LastMove);
 	}
 
 	if (GetOwnerRole() == ROLE_SimulatedProxy)
@@ -99,8 +98,15 @@ void UGoKartMovementReplicator::Server_SendMove_Implementation(FGoKartMove Move)
 	if (MovementComponent == nullptr) return;
 
 	MovementComponent->SimulateMove(Move);
+	UpdateServerState(Move);
+}
 
-	ServerState.LastMove = Move;
+void UGoKartMovementReplicator::UpdateServerState(FGoKartMove LastMove)
+{
+	auto MovementComponent = GetOwner()->FindComponentByClass<UGoKartMovementComponent>();
+	if (MovementComponent == nullptr) return;
+
+	ServerState.LastMove = LastMove;
 	ServerState.Tranform = GetOwner()->GetActorTransform();
 	ServerState.Velocity = MovementComponent->GetVelocity();
 }
