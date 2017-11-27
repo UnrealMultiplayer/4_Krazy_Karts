@@ -5,32 +5,17 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "GoKartMovementComponent.h"
-
-#include "GoKartMovementReplicator.generated.h"
-
-USTRUCT()
-struct FGoKartState
-{
-	GENERATED_USTRUCT_BODY()
-
-		UPROPERTY()
-		FTransform Tranform;
-
-	UPROPERTY()
-		FVector Velocity;
-
-	UPROPERTY()
-		FGoKartMove LastMove;
-};
+#include "GoKartMovementReplicator.h"
+#include "UGoKartMovementRepAutonomous.generated.h"
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class KRAZYKARTS_API UGoKartMovementReplicator : public UActorComponent
+class KRAZYKARTS_API UUGoKartMovementRepAutonomous : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UGoKartMovementReplicator();
+	UUGoKartMovementRepAutonomous();
 
 protected:
 	// Called when the game starts
@@ -40,16 +25,15 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UFUNCTION(Server, Reliable, WithValidation)
-		void Server_SendMove(FGoKartMove Move);
+	void SetReplicator(UGoKartMovementReplicator* Ptr) { Replicator = Ptr; };
+
+	void ReplicatedState(FGoKartState State);
 
 private:
-	void UpdateServerState(FGoKartMove LastMove);
+	void ClearAcknowledgeMoves(FGoKartMove LastMove);
 
-	UPROPERTY(ReplicatedUsing = OnRep_ServerState)
-		FGoKartState ServerState;
+	TArray<FGoKartMove> UnacknowledgedMoves;
 
-	UFUNCTION()
-		void OnRep_ServerState();
+	UGoKartMovementReplicator* Replicator;
 	
 };

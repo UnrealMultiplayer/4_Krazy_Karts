@@ -3,6 +3,7 @@
 #include "GoKartMovementReplicator.h"
 #include "UnrealNetwork.h"
 #include "GameFramework/Actor.h"
+#include "UGoKartMovementRepAutonomous.h"
 
 // Sets default values for this component's properties
 UGoKartMovementReplicator::UGoKartMovementReplicator()
@@ -21,6 +22,15 @@ void UGoKartMovementReplicator::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (GetOwnerRole() == ROLE_AutonomousProxy)
+	{
+		auto createdComp = NewObject<UUGoKartMovementRepAutonomous>(GetOwner());
+		if (createdComp)
+		{
+			createdComp->RegisterComponent();
+			createdComp->SetReplicator(this);
+		}
+	}
 }
 
 
@@ -34,15 +44,6 @@ void UGoKartMovementReplicator::TickComponent(float DeltaTime, ELevelTick TickTy
 	
 	FGoKartMove LastMove = MovementComponent->GetLastMove();
 
-	if (GetOwnerRole() == ROLE_AutonomousProxy)
-	{
-		Server_SendMove(LastMove);
-
-		UnacknowledgedMoves.Add(LastMove);
-
-		UE_LOG(LogTemp, Warning, TEXT("Queue length: %d"), UnacknowledgedMoves.Num());
-	}
-	
 	if (GetOwner()->GetRemoteRole() == ROLE_SimulatedProxy)
 	{
 		UpdateServerState(LastMove);
@@ -62,35 +63,13 @@ void UGoKartMovementReplicator::GetLifetimeReplicatedProps(TArray< FLifetimeProp
 
 void UGoKartMovementReplicator::OnRep_ServerState()
 {
-	auto MovementComponent = GetOwner()->FindComponentByClass<UGoKartMovementComponent>();
-	if (MovementComponent == nullptr) return;
-
-	GetOwner()->SetActorTransform(ServerState.Tranform);
-	MovementComponent->SetVelocity(ServerState.Velocity);
-
-	ClearAcknowledgeMoves(ServerState.LastMove);
-
-	for (const FGoKartMove& Move : UnacknowledgedMoves)
+	auto AutonomousReplicator = GetOwner()->FindComponentByClass<UUGoKartMovementRepAutonomous>();
+	if (AutonomousReplicator != nullptr)
 	{
-		MovementComponent->SimulateMove(Move);
+		AutonomousReplicator->ReplicatedState(ServerState);
+
 	}
 }
-
-void UGoKartMovementReplicator::ClearAcknowledgeMoves(FGoKartMove LastMove)
-{
-	TArray<FGoKartMove> NewMoves;
-
-	for (const FGoKartMove& Move : UnacknowledgedMoves)
-	{
-		if (Move.Time > LastMove.Time)
-		{
-			NewMoves.Add(Move);
-		}
-	}
-
-	UnacknowledgedMoves = NewMoves;
-}
-
 
 void UGoKartMovementReplicator::Server_SendMove_Implementation(FGoKartMove Move)
 {
@@ -109,6 +88,7 @@ void UGoKartMovementReplicator::UpdateServerState(FGoKartMove LastMove)
 	ServerState.LastMove = LastMove;
 	ServerState.Tranform = GetOwner()->GetActorTransform();
 	ServerState.Velocity = MovementComponent->GetVelocity();
+
 }
 
 bool UGoKartMovementReplicator::Server_SendMove_Validate(FGoKartMove Move)
