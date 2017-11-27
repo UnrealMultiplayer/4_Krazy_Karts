@@ -20,7 +20,7 @@ void UGoKartMovementReplicator::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// ...
+	SetIsReplicated(true);
 	
 }
 
