@@ -6,7 +6,7 @@
 
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
-#include "UnrealNetwork.h"
+#include "GoKartMovementComponent.h"
 
 // Sets default values
 AGoKart::AGoKart()
@@ -26,12 +26,6 @@ void AGoKart::BeginPlay()
 	{
 		NetUpdateFrequency = 1;
 	}
-}
-
-void AGoKart::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(AGoKart, ServerState);
 }
 
 FString GetEnumText(ENetRole Role)
@@ -56,60 +50,8 @@ void AGoKart::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	auto MovementComponent = FindComponentByClass<UGoKartMovementComponent>();
-	if (MovementComponent == nullptr) return;
-
-	if (IsLocallyControlled())
-	{
-		FGoKartMove Move = MovementComponent->CreateMove(DeltaTime);
-
-		if (!HasAuthority()) {
-			UnacknowledgedMoves.Add(Move);
-
-			UE_LOG(LogTemp, Warning, TEXT("Queue length: %d"), UnacknowledgedMoves.Num());
-
-			MovementComponent->SimulateMove(Move);
-		}
-
-		Server_SendMove(Move);
-	}
-	else if (!HasAuthority())
-	{
-		MovementComponent->SimulateMove(ServerState.LastMove);
-	}
-
-	DrawDebugString(GetWorld(), FVector(0, 0, 100), GetEnumText(Role), this, FColor::White, DeltaTime);
-}
-
-void AGoKart::OnRep_ServerState()
-{
-	auto MovementComponent = FindComponentByClass<UGoKartMovementComponent>();
-	if (MovementComponent == nullptr) return;
-
-	SetActorTransform(ServerState.Tranform);
-	MovementComponent->SetVelocity(ServerState.Velocity);
-
-	ClearAcknowledgeMoves(ServerState.LastMove);
-
-	for (const FGoKartMove& Move : UnacknowledgedMoves)
-	{
-		MovementComponent->SimulateMove(Move);
-	}
-}
-
-void AGoKart::ClearAcknowledgeMoves(FGoKartMove LastMove)
-{
-	TArray<FGoKartMove> NewMoves;
-
-	for (const FGoKartMove& Move : UnacknowledgedMoves)
-	{
-		if (Move.Time > LastMove.Time)
-		{
-			NewMoves.Add(Move);
-		}
-	}
-
-	UnacknowledgedMoves = NewMoves;
+	DrawDebugString(GetWorld(), FVector(0, 0, 130), GetEnumText(Role), this, FColor::White, DeltaTime);
+	DrawDebugString(GetWorld(), FVector(0, 0, 100), GetEnumText(GetRemoteRole()), this, FColor::White, DeltaTime);
 }
 
 // Called to bind functionality to input
@@ -136,21 +78,4 @@ void AGoKart::MoveRight(float Value)
 	if (MovementComponent == nullptr) return;
 
 	MovementComponent->SetSteeringThrow(Value);
-}
-
-void AGoKart::Server_SendMove_Implementation(FGoKartMove Move)
-{
-	auto MovementComponent = FindComponentByClass<UGoKartMovementComponent>();
-	if (MovementComponent == nullptr) return;
-
-	MovementComponent->SimulateMove(Move);
-
-	ServerState.LastMove = Move;
-	ServerState.Tranform = GetActorTransform();
-	ServerState.Velocity = MovementComponent->GetVelocity();
-}
-
-bool AGoKart::Server_SendMove_Validate(FGoKartMove Move)
-{
-	return true; //TODO: Make better validation
 }
