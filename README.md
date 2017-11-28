@@ -128,3 +128,9 @@
 + Simulate all moves.
 + Testing for smoothness.
 + How can we still make it glitch?
+
+### 21 Fixing SimulatedProxy Prediction ###
+
++ Ensuring the Server simulates once.
++ Local prediction on the client.
++ Making smoother predictions.
