@@ -134,3 +134,10 @@
 + Ensuring the Server simulates once.
 + Local prediction on the client.
 + Making smoother predictions.
+
+### 22 Refactoring Into Components ###
+
++ Red-Green-Refactor process.
++ How to spot your "code smells".
++ Identifying a suitable refactor.
++ Planning our refactor.
