@@ -32,26 +32,31 @@ void UGoKartMovementReplicator::TickComponent(float DeltaTime, ELevelTick TickTy
 	
 	if (MovementComponent == nullptr) return;
 	
+	FGoKartMove LastMove = MovementComponent->GetLastMove();
+
 	if (GetOwnerRole() == ROLE_AutonomousProxy)
 	{
-		FGoKartMove Move = MovementComponent->CreateMove(DeltaTime);
-		MovementComponent->SimulateMove(Move);
-
-		UnacknowledgedMoves.Add(Move);
-		Server_SendMove(Move);
+		UnacknowledgedMoves.Add(LastMove);
+		Server_SendMove(LastMove);
 	}
 
 	// We are the server and in control of the pawn.
-	if (GetOwnerRole() == ROLE_Authority && GetOwner()->GetRemoteRole() == ROLE_SimulatedProxy)
+	if (GetOwner()->GetRemoteRole() == ROLE_SimulatedProxy)
 	{
-		FGoKartMove Move = MovementComponent->CreateMove(DeltaTime);
-		Server_SendMove(Move);
+		UpdateServerState(LastMove);
 	}
 
 	if (GetOwnerRole() == ROLE_SimulatedProxy)
 	{
 		MovementComponent->SimulateMove(ServerState.LastMove);
 	}
+}
+
+void UGoKartMovementReplicator::UpdateServerState(const FGoKartMove& Move)
+{
+	ServerState.LastMove = Move;
+	ServerState.Tranform = GetOwner()->GetActorTransform();
+	ServerState.Velocity = MovementComponent->GetVelocity();
 }
 
 void UGoKartMovementReplicator::GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const
@@ -96,9 +101,7 @@ void UGoKartMovementReplicator::Server_SendMove_Implementation(FGoKartMove Move)
 
 	MovementComponent->SimulateMove(Move);
 
-	ServerState.LastMove = Move;
-	ServerState.Tranform = GetOwner()->GetActorTransform();
-	ServerState.Velocity = MovementComponent->GetVelocity();
+	UpdateServerState(Move);
 }
 
 bool UGoKartMovementReplicator::Server_SendMove_Validate(FGoKartMove Move)
