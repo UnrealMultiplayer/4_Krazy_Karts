@@ -148,3 +148,11 @@
 + Move member declarations across.
 + Move function implementations.
 + Fix build errors.
+
+### 24 Extracting A Replication Component ###
+
++ Creating the component.
++ Enable replication.
++ Move member declarations across.
++ Move function implementations.
++ Fix build errors.
