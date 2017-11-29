@@ -141,3 +141,10 @@
 + How to spot your "code smells".
 + Identifying a suitable refactor.
 + Planning our refactor.
+
+### 23 Extracting A Movement Component ###
+
++ Create and name the component.
++ Move member declarations across.
++ Move function implementations.
++ Fix build errors.
