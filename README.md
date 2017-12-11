@@ -168,3 +168,10 @@
 + How does linear interpolation work?
 + Overview of client interpolation.
 + Pseudocode for client interpolation.
+
+### 26 FMath::Lerp For Client Interpolation ###
+
++ Ensure movement replication is off.
++ Updating the time variables.
++ `FMath::Lerp` vs `FMath::LerpStable`.
++ Implementing the pseudocode.
