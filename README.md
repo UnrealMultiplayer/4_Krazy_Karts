@@ -162,3 +162,9 @@
 + What happens if we disable the replicator?
 + Allow the Movement Component to tick.
 + Getting the information to replicate.
+
+### 26 Linear Interpolation For Position ###
+
++ How does linear interpolation work?
++ Overview of client interpolation.
++ Pseudocode for client interpolation.
