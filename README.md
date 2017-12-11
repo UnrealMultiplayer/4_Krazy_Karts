@@ -169,9 +169,15 @@
 + Overview of client interpolation.
 + Pseudocode for client interpolation.
 
-### 26 FMath::Lerp For Client Interpolation ###
+### 27 FMath::Lerp For Client Interpolation ###
 
 + Ensure movement replication is off.
 + Updating the time variables.
 + `FMath::Lerp` vs `FMath::LerpStable`.
 + Implementing the pseudocode.
+
+### 28 FQuat::Slerp For Rotation ###
+
++ `Slerp` vs `Lerp`.
++ Store tranform instead of location.
++ Implementing `Slerp`ed location.
