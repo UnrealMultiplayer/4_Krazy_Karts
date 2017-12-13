@@ -188,3 +188,9 @@
 + How velocity can help or hinder.
 + A brief overview of polynomials.
 + Introducing the Hermite Cubic Spline.
+
+### 30 FMath::CubicInterp For Velocity ###
+
++ Slopes, derivatives and velocity.
++ Using `CubicInterp` for location.
++ Using `CubicInterpDerivative` for velocity.
