@@ -194,3 +194,9 @@
 + Slopes, derivatives and velocity.
 + Using `CubicInterp` for location.
 + Using `CubicInterpDerivative` for velocity.
+
+### 31 Refactoring With Structs ###
+
++ Assessing the existing code.
++ Creating a plain C++ struct.
++ Pulling out methods.
