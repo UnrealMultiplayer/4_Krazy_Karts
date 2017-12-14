@@ -200,3 +200,9 @@
 + Assessing the existing code.
 + Creating a plain C++ struct.
 + Pulling out methods.
+
+### 32 Client Interpolation Mesh Offset ##
+
++ Understanding mesh offseting.
++ Set up the mesh offset root component.
++ Manipulating the offset instead.
