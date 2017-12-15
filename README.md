@@ -206,3 +206,9 @@
 + Understanding mesh offseting.
 + Set up the mesh offset root component.
 + Manipulating the offset instead.
+
+### 33 Advanced Cheat Protection ###
+
++ Bounding the inputs.
++ Stressing our DeltaTime.
++ Tracking simulation time.
