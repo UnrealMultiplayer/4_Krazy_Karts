@@ -1,5 +1,9 @@
-# 4_Krazy_Karts
-(ref: KK_UEM)
+# Unreal Multiplayer Course - Section 4 - Krazy Karts
+Make your games feel responsive no matter what network conditions your players face. Understand and explain concepts such as lag. Devise mechanism to compensate for lag in your games.
+
+### 0 Introduction to Krazy Karts ###
+
++ We overview the sections topics.
 
 ### 1 Creating A Go-Kart Pawn ###
 
