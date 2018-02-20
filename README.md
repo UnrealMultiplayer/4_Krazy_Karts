@@ -216,3 +216,9 @@ Make your games feel responsive no matter what network conditions your players f
 + Bounding the inputs.
 + Stressing our DeltaTime.
 + Tracking simulation time.
+
+### 99 End Of Course Wrap-up ##
+
++ Congratulations on making it this far!
++ Why we don't cover dedicated server.
++ How to continue practicing your skills
