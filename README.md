@@ -1,5 +1,11 @@
 # Unreal Multiplayer Course - Section 4 - Krazy Karts
-Make your games feel responsive no matter what network conditions your players face. Understand and explain concepts such as lag. Devise mechanism to compensate for lag in your games.
+
+In follow up to our hugely successful [Complete Unreal Engine Developer](http://gdev.tv/urcgithub) course we bring you [Unreal Multiplayer Mastery](http://gdev.tv/uemgithub) - as on featured on [Epic's UE4 blog](https://www.unrealengine.com/en-US/blog/getting-started-with-unreal-multiplayer-in-cpp).
+
+In this section make your games feel responsive no matter what network conditions your players face. Understand and explain concepts such as lag. Devise mechanism to compensate for lag in your games.
+
+You're welcome to download, fork or do whatever else legal with all the files! The real value is in our huge, high-quality online tutorials that accompany this repo. You can check out the course here: [Unreal Multiplayer Mastery](http://gdev.tv/uemgithub)
+
 
 ### 0 Introduction to Krazy Karts ###
 
